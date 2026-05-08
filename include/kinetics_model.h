@@ -28,3 +28,15 @@ public:
     CompetitiveInhibition(Enzyme e, double inhibitor, double ki);
     double calculateVelocity(double S) override;
 };
+
+// Non-Competitive Inhibition
+class NonCompetitiveInhibition : public KineticsModel {
+private:
+    Enzyme enzyme;
+    double inhibitor;
+    double Ki;
+
+public:
+    NonCompetitiveInhibition(Enzyme e, double inhibitor, double ki);
+    double calculateVelocity(double S) override;
+};
