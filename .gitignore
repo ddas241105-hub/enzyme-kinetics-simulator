@@ -1,8 +1,8 @@
-﻿simulator.exe
-simulator.exe
-.vscode/
-simulator.exe
-.vscode/
-.vscode/
+﻿# Executable files
 *.exe
+
+# VS Code settings folder
+.vscode/
+
+# CSV results folder files
 results/*.csv
