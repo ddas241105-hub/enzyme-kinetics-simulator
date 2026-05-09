@@ -1,42 +1,51 @@
 #include "../include/kinetics_model.h"
 
-// Michaelis-Menten
-MichaelisMenten::MichaelisMenten(Enzyme e)
+KineticsModel::KineticsModel(const Enzyme& e)
     : enzyme(e) {}
 
-double MichaelisMenten::calculateVelocity(double S) {
-    return (enzyme.getVmax() * S)
-           / (enzyme.getKm() + S);
+
+MichaelisMenten::MichaelisMenten(const Enzyme& e)
+    : KineticsModel(e) {}
+
+
+double MichaelisMenten::calculateVelocity(double substrate) {
+
+    double vmax = enzyme.adjustedVmax();
+
+    return (vmax * substrate)
+           / (enzyme.getKm() + substrate);
 }
 
-// Competitive Inhibition
+
 CompetitiveInhibition::CompetitiveInhibition(
-    Enzyme e,
-    double inhibitor,
-    double ki
+    const Enzyme& e,
+    double inhibitorConc
 )
-    : enzyme(e), inhibitor(inhibitor), Ki(ki) {}
+    : KineticsModel(e), inhibitor(inhibitorConc) {}
 
-double CompetitiveInhibition::calculateVelocity(double S) {
-    double Km_eff = enzyme.getKm()
-                    * (1 + inhibitor / Ki);
 
-    return (enzyme.getVmax() * S)
-           / (Km_eff + S);
+double CompetitiveInhibition::calculateVelocity(double substrate) {
+
+    double effectiveKm = enzyme.getKm() * (1 + inhibitor);
+
+    double vmax = enzyme.adjustedVmax();
+
+    return (vmax * substrate)
+           / (effectiveKm + substrate);
 }
 
-// Non-Competitive Inhibition
+
 NonCompetitiveInhibition::NonCompetitiveInhibition(
-    Enzyme e,
-        double inhibitor,
-    double ki
+    const Enzyme& e,
+    double inhibitorConc
 )
-    : enzyme(e), inhibitor(inhibitor), Ki(ki) {}
+    : KineticsModel(e), inhibitor(inhibitorConc) {}
 
-double NonCompetitiveInhibition::calculateVelocity(double S) {
-    double Vmax_eff = enzyme.getVmax()
-                      / (1 + inhibitor / Ki);
 
-    return (Vmax_eff * S)
-           / (enzyme.getKm() + S);
+double NonCompetitiveInhibition::calculateVelocity(double substrate) {
+
+    double reducedVmax = enzyme.adjustedVmax() / (1 + inhibitor);
+
+    return (reducedVmax * substrate)
+           / (enzyme.getKm() + substrate);
 }

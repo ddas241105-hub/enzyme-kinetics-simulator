@@ -1,42 +1,48 @@
-#pragma once
+#ifndef KINETICS_MODEL_H
+#define KINETICS_MODEL_H
+
 #include "enzyme.h"
 
 class KineticsModel {
+protected:
+    Enzyme enzyme;
+
 public:
-    virtual double calculateVelocity(double S) = 0;
+    KineticsModel(const Enzyme& e);
+
+    virtual double calculateVelocity(double substrate) = 0;
+
     virtual ~KineticsModel() {}
 };
 
-// Michaelis-Menten
-class MichaelisMenten : public KineticsModel {
-private:
-    Enzyme enzyme;
 
+class MichaelisMenten : public KineticsModel {
 public:
-    MichaelisMenten(Enzyme e);
-    double calculateVelocity(double S) override;
+    MichaelisMenten(const Enzyme& e);
+
+    double calculateVelocity(double substrate) override;
 };
 
-// Competitive Inhibition
+
 class CompetitiveInhibition : public KineticsModel {
 private:
-    Enzyme enzyme;
     double inhibitor;
-    double Ki;
 
 public:
-    CompetitiveInhibition(Enzyme e, double inhibitor, double ki);
-    double calculateVelocity(double S) override;
+    CompetitiveInhibition(const Enzyme& e, double inhibitorConc);
+
+    double calculateVelocity(double substrate) override;
 };
 
-// Non-Competitive Inhibition
+
 class NonCompetitiveInhibition : public KineticsModel {
 private:
-    Enzyme enzyme;
     double inhibitor;
-    double Ki;
 
 public:
-    NonCompetitiveInhibition(Enzyme e, double inhibitor, double ki);
-    double calculateVelocity(double S) override;
+    NonCompetitiveInhibition(const Enzyme& e, double inhibitorConc);
+
+    double calculateVelocity(double substrate) override;
 };
+
+#endif

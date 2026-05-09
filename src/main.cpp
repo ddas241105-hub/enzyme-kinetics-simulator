@@ -1,100 +1,261 @@
 #include <iostream>
-#include <vector>
 #include <iomanip>
+#include <vector>
 
 #include "../include/enzyme.h"
 #include "../include/kinetics_model.h"
 #include "../include/file_handler.h"
 
-int main() {
-    Enzyme enzyme(0.5, 10);
 
-    MichaelisMenten normalModel(enzyme);
-    CompetitiveInhibition competitiveModel(enzyme, 2.0, 1.0);
-    NonCompetitiveInhibition nonCompetitiveModel(enzyme, 2.0, 1.0);
+void singleSimulation(
+    KineticsModel& model,
+    double initialSubstrate,
+    double dt,
+    double totalTime,
+    const std::string& outputFile,
+    const std::string& label
+) {
 
-    double dt = 0.01;
-    int steps = 1000;
+    std::vector<double> timeData;
+    std::vector<double> substrateData;
 
-    double initialSubstrate = 5.0;
+    double S = initialSubstrate;
 
-    double S_normal = initialSubstrate;
-    double S_comp = initialSubstrate;
-    double S_noncomp = initialSubstrate;
+    std::cout << "\n=== "
+              << label
+              << " ===\n";
 
-    std::vector<double> time_history;
+    std::cout
+        << std::setw(12) << "Time"
+        << std::setw(18) << "Substrate"
+        << std::endl;
 
-    std::vector<double> substrate_normal;
-    std::vector<double> substrate_comp;
-    std::vector<double> substrate_noncomp;
-
-    std::cout << std::setw(10) << "Time"
-              << std::setw(15) << "Normal"
-              << std::setw(15) << "Competitive"
-              << std::setw(20) << "NonCompetitive"
-              << std::endl;
+    int steps = totalTime / dt;
 
     for (int i = 0; i < steps; i++) {
+
         double time = i * dt;
 
-        double v_normal = normalModel.calculateVelocity(S_normal);
-        double v_comp = competitiveModel.calculateVelocity(S_comp);
-        double v_noncomp = nonCompetitiveModel.calculateVelocity(S_noncomp);
+        double velocity = model.calculateVelocity(S);
 
-        S_normal -= v_normal * dt;
-        S_comp -= v_comp * dt;
-        S_noncomp -= v_noncomp * dt;
+        S = S - velocity * dt;
 
-        if (S_normal < 0) S_normal = 0;
-        if (S_comp < 0) S_comp = 0;
-        if (S_noncomp < 0) S_noncomp=0;
-    
-        time_history.push_back(time);
+        if (S < 0)
+            S = 0;
 
-        substrate_normal.push_back(S_normal);
-        substrate_comp.push_back(S_comp);
-        substrate_noncomp.push_back(S_noncomp);
+        timeData.push_back(time);
+        substrateData.push_back(S);
 
-        std::cout << std::fixed << std::setprecision(4)
-                  << std::setw(10) << time
-                  << std::setw(15) << S_normal
-                  << std::setw(15) << S_comp
-                  << std::setw(20) << S_noncomp
-                  << std::endl;
+        std::cout
+            << std::setw(12)
+            << std::fixed
+            << std::setprecision(4)
+            << time
 
-        if (S_normal <= 0.001
-            && S_comp <= 0.001
-            && S_noncomp <= 0.001)
-            break;
+            << std::setw(18)
+            << S
+            << std::endl;
     }
 
-    std::vector<double> dummy;
-
     FileHandler::writeCSV(
-        "results/normal.csv",   
-        time_history,
-        substrate_normal,
-        dummy,
-        dummy
+        outputFile,
+        timeData,
+        substrateData
+    );
+}
+
+
+
+void combinedSimulation(
+    KineticsModel& normal,
+    KineticsModel& competitive,
+    KineticsModel& noncompetitive,
+    double initialSubstrate,
+    double dt,
+    double totalTime
+) {
+
+    double Sn = initialSubstrate;
+    double Sc = initialSubstrate;
+    double Snc = initialSubstrate;
+
+    int steps = totalTime / dt;
+
+    std::cout << "\n========== ALL SIMULATIONS ==========\n\n";
+
+    std::cout
+        << std::setw(12) << "Time"
+        << std::setw(18) << "Normal"
+        << std::setw(18) << "Competitive"
+        << std::setw(22) << "NonCompetitive"
+        << std::endl;
+
+    for (int i = 0; i < steps; i++) {
+
+        double time = i * dt;
+
+        double vn = normal.calculateVelocity(Sn);
+        double vc = competitive.calculateVelocity(Sc);
+        double vnc = noncompetitive.calculateVelocity(Snc);
+
+        Sn -= vn * dt;
+        Sc -= vc * dt;
+        Snc -= vnc * dt;
+
+        if (Sn < 0) Sn = 0;
+        if (Sc < 0) Sc = 0;
+        if (Snc < 0) Snc = 0;
+
+        std::cout
+            << std::setw(12)
+            << std::fixed
+            << std::setprecision(4)
+            << time
+
+            << std::setw(18)
+            << Sn
+
+            << std::setw(18)
+            << Sc
+
+            << std::setw(22)
+            << Snc
+
+            << std::endl;
+    }
+}
+
+
+
+int main() {
+
+    auto config = FileHandler::readConfig("config.txt");
+
+    Enzyme enzyme(
+        config["Km"],
+        config["Vmax"],
+        config["Temperature"]
     );
 
-    FileHandler::writeCSV(
-        "results/competitive.csv",
-        time_history,
-        substrate_comp,
-        dummy,
-        dummy
+
+    MichaelisMenten normal(enzyme);
+
+    CompetitiveInhibition competitive(
+        enzyme,
+        config["CompetitiveInhibitor"]
     );
 
-    FileHandler::writeCSV(
-        "results/noncompetitive.csv",
-        time_history,
-        substrate_noncomp,
-        dummy,
-        dummy
+    NonCompetitiveInhibition noncompetitive(
+        enzyme,
+        config["NonCompetitiveInhibitor"]
     );
 
-    std::cout << "\nSimulation completed successfully.\n";
+
+    double initialSubstrate = config["InitialSubstrate"];
+    double dt = config["TimeStep"];
+    double totalTime = config["SimulationTime"];
+
+
+    int choice = 0;
+
+    while (choice != 5) {
+
+        std::cout << "\n=====================================\n";
+        std::cout << "      ENZYME KINETICS SIMULATOR\n";
+        std::cout << "=====================================\n";
+
+        std::cout << "1. Normal Michaelis-Menten\n";
+        std::cout << "2. Competitive Inhibition\n";
+        std::cout << "3. Noncompetitive Inhibition\n";
+        std::cout << "4. Run All Simulations\n";
+        std::cout << "5. Exit\n";
+
+        std::cout << "\nEnter choice: ";
+        std::cin >> choice;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "\nInvalid input.\n";
+            continue;
+        }
+
+// CLEAR leftover characters like '.' after valid input
+std::cin.ignore(10000, '\n');
+
+        switch(choice) {
+
+            case 1:
+
+                singleSimulation(
+                    normal,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "normal.csv",
+                    "Normal Michaelis-Menten"
+                );
+
+                break;
+
+
+
+            case 2:
+
+                singleSimulation(
+                    competitive,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "competitive.csv",
+                    "Competitive Inhibition"
+                );
+
+                break;
+
+
+
+            case 3:
+
+                singleSimulation(
+                    noncompetitive,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "noncompetitive.csv",
+                    "Noncompetitive Inhibition"
+                );
+
+                break;
+
+
+
+            case 4:
+
+                combinedSimulation(
+                    normal,
+                    competitive,
+                    noncompetitive,
+                    initialSubstrate,
+                    dt,
+                    totalTime
+                );
+
+                break;
+
+
+
+            case 5:
+
+                std::cout << "\nExiting simulator...\n";
+                break;
+
+
+
+            default:
+
+                std::cout << "\nInvalid choice.\n";
+        }
+    }
 
     return 0;
 }
