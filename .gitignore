@@ -6,3 +6,6 @@
 
 # CSV results folder files
 results/*.csv
+competitive.csv
+non competitive.csv
+normal.csv
