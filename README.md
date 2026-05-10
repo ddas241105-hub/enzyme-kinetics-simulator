@@ -48,14 +48,6 @@ The program generates:
 - reaction velocity history
 - conversion percentages over time
 
-  # Enzyme Kinetics Simulator
-
-## Combined Kinetics Plot
-![Combined Plot](plots/combined_kinetics.png)
-
-## Lineweaver-Burk Plot
-![LB Plot](plots/lineweaver_burk.png)
-
 ## Future Improvements
 
 - Non-competitive inhibition
