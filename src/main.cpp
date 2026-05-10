@@ -1,11 +1,12 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <fstream>
 
 #include "../include/enzyme.h"
 #include "../include/kinetics_model.h"
 #include "../include/file_handler.h"
-
+#include "../include/lineweaver_burk.h"
 
 void singleSimulation(
     KineticsModel& model,
@@ -18,6 +19,11 @@ void singleSimulation(
 
     std::vector<double> timeData;
     std::vector<double> substrateData;
+    std::vector<double> normal_velocity;
+    std::vector<double> competitive_velocity;
+    std::vector<double> noncompetitive_velocity;
+    
+
 
     double S = initialSubstrate;
 
@@ -197,8 +203,6 @@ std::cin.ignore(10000, '\n');
 
                 break;
 
-
-
             case 2:
 
                 singleSimulation(
@@ -211,8 +215,6 @@ std::cin.ignore(10000, '\n');
                 );
 
                 break;
-
-
 
             case 3:
 
@@ -227,8 +229,6 @@ std::cin.ignore(10000, '\n');
 
                 break;
 
-
-
             case 4:
 
                 combinedSimulation(
@@ -241,8 +241,6 @@ std::cin.ignore(10000, '\n');
                 );
 
                 break;
-
-
 
             case 5:
 
@@ -257,5 +255,120 @@ std::cin.ignore(10000, '\n');
         }
     }
 
+    // NORMAL
+
+    std::vector<double> normal_substrate;
+    std::vector<double> normal_velocity;
+
+    double S1 = 5.0;
+
+    for (int i = 0; i < 300; i++) {
+
+        double velocity = normal.calculateVelocity(S1);
+
+        normal_substrate.push_back(S1);
+        normal_velocity.push_back(velocity);
+
+        S1 = S1 - velocity * dt;
+
+        if (S1 < 0.0001)
+            S1 = 0.0001;
+    }
+
+
+    // COMPETITIVE
+
+    std::vector<double> competitive_substrate;
+    std::vector<double> competitive_velocity;
+
+    double S2 = 5.0;
+
+    for (int i = 0; i < 300; i++) {
+
+        double velocity = competitive.calculateVelocity(S2);
+
+        competitive_substrate.push_back(S2);
+        competitive_velocity.push_back(velocity);
+
+        S2 = S2 - velocity * dt;
+
+        if (S2 < 0.0001)
+            S2 = 0.0001;
+    }
+
+
+    // NONCOMPETITIVE
+
+    std::vector<double> noncompetitive_substrate;
+    std::vector<double> noncompetitive_velocity;
+
+    double S3 = 5.0;
+
+    for (int i = 0; i < 300; i++) {
+
+        double velocity = noncompetitive.calculateVelocity(S3);
+
+        noncompetitive_substrate.push_back(S3);
+        noncompetitive_velocity.push_back(velocity);
+
+        S3 = S3 - velocity * dt;
+
+        if (S3 < 0.0001)
+            S3 = 0.0001;
+    }
+
+
+    // INVERSE VALUES
+
+    std::vector<double> invS_normal =
+        LineweaverBurk::inverseSubstrate(normal_substrate);
+
+    std::vector<double> invV_normal =
+        LineweaverBurk::inverseVelocity(normal_velocity);
+
+
+    std::vector<double> invS_comp =
+        LineweaverBurk::inverseSubstrate(competitive_substrate);
+
+    std::vector<double> invV_comp =
+        LineweaverBurk::inverseVelocity(competitive_velocity);
+
+
+    std::vector<double> invS_noncomp =
+        LineweaverBurk::inverseSubstrate(noncompetitive_substrate);
+
+    std::vector<double> invV_noncomp =
+        LineweaverBurk::inverseVelocity(noncompetitive_velocity);
+
+
+    // SAVE CSV
+
+    std::ofstream lbFile("results/lineweaver_burk.csv");
+
+    lbFile << "InvS_Normal,InvV_Normal,"
+           << "InvS_Competitive,InvV_Competitive,"
+           << "InvS_Noncompetitive,InvV_Noncompetitive\n";
+
+    for (int i = 0; i < 300; i++) {
+
+        lbFile
+            << invS_normal[i] << ","
+            << invV_normal[i] << ","
+
+            << invS_comp[i] << ","
+            << invV_comp[i] << ","
+
+            << invS_noncomp[i] << ","
+            << invV_noncomp[i]
+
+            << "\n";
+    }
+
+    lbFile.close();
+
+    std::cout << "\nSaved: lineweaver_burk.csv\n";
+
+
     return 0;
 }
+
