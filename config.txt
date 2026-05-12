@@ -1,8 +1,0 @@
-Km=0.5
-Vmax=10
-Temperature=37
-InitialSubstrate=5
-TimeStep=0.01
-SimulationTime=3
-CompetitiveInhibitor=2
-NonCompetitiveInhibitor=2
