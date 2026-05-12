@@ -3,3 +3,6 @@
 
 # VS Code settings folder
 .vscode/
+
+results/*.csv
+plots/*.png
