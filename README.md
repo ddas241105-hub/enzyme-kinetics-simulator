@@ -20,6 +20,7 @@ The simulator allows users to:
 - Automatic CSV generation
 - Automatic graph generation using Python
 - Lineweaver–Burk plot generation
+- Velocity vs substrate concentration analysis
 - User-defined kinetic parameters
 
 ---
