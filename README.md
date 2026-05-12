@@ -82,3 +82,8 @@ v = ((Vmax / (1 + [I]/Ki)) × [S]) / (Km + [S])
 
 ```bash
 g++ src/*.cpp -o simulator
+```
+
+###Author
+Debopriya Das
+Developed as a computational bioengineering and simulation project integrating biochemical kinetics with software engineering principles.
