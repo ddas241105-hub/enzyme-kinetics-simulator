@@ -8,6 +8,7 @@
 #include "../include/file_handler.h"
 #include "../include/lineweaver_burk.h"
 
+
 void singleSimulation(
     KineticsModel& model,
     double initialSubstrate,
@@ -131,36 +132,47 @@ void combinedSimulation(
     }
 }
 
-
-
 int main() {
 
-    auto config = FileHandler::readConfig("config.txt");
+    double Vmax, Km, initialSubstrate, dt;
+    double competitiveInhibitor, nonCompetitiveInhibitor, totalTime;
 
-    Enzyme enzyme(
-        config["Km"],
-        config["Vmax"],
-        config["Temperature"]
-    );
+    std::cout << "\n=== Enter Simulation Parameters ===\n";
 
+    std::cout << "Enter Vmax: ";
+    std::cin >> Vmax;
+
+    std::cout << "Enter Km: ";
+    std::cin >> Km;
+
+    std::cout << "Enter competitive inhibitor concentration: ";
+    std::cin >> competitiveInhibitor;
+
+    std::cout << "Enter noncompetitive inhibitor concentration: ";
+    std::cin >> nonCompetitiveInhibitor;
+
+    std::cout << "Enter initial substrate concentration: ";
+    std::cin >> initialSubstrate;
+
+    std::cout << "Enter timestep dt: ";
+    std::cin >> dt;
+
+    std::cout << "Enter total simulation time: ";
+    std::cin >> totalTime;
+
+    Enzyme enzyme(Km, Vmax, 37.0);
 
     MichaelisMenten normal(enzyme);
 
     CompetitiveInhibition competitive(
         enzyme,
-        config["CompetitiveInhibitor"]
+        competitiveInhibitor
     );
 
     NonCompetitiveInhibition noncompetitive(
         enzyme,
-        config["NonCompetitiveInhibitor"]
+        nonCompetitiveInhibitor
     );
-
-
-    double initialSubstrate = config["InitialSubstrate"];
-    double dt = config["TimeStep"];
-    double totalTime = config["SimulationTime"];
-
 
     int choice = 0;
 
@@ -178,6 +190,7 @@ int main() {
 
         std::cout << "\nEnter choice: ";
         std::cin >> choice;
+
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -185,8 +198,7 @@ int main() {
             continue;
         }
 
-// CLEAR leftover characters like '.' after valid input
-std::cin.ignore(10000, '\n');
+        std::cin.ignore(10000, '\n');
 
         switch(choice) {
 
