@@ -320,14 +320,13 @@ int main() {
 
                 system("py plot_combined.py");
                 system("py plot_lineweaver_combined.py");
+                system("py plot_velocity.py");
             break;
 
             case 5:
 
                 std::cout << "\nExiting simulator...\n";
                 break;
-
-
 
             default:
 
@@ -445,9 +444,6 @@ int main() {
     }
 
     lbFile.close();
-
-    std::cout << "\nSaved: lineweaver_burk.csv\n";
-
 
     return 0;
 }
