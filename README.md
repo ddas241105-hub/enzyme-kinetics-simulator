@@ -1,57 +1,84 @@
-# Enzyme Kinetics Simulator (C++)
+# Enzyme Kinetics Simulator
 
-A biochemical simulation engine written in C++ that models enzyme-catalyzed reactions using Michaelis-Menten kinetics.
+A C++-based simulation tool for studying enzyme kinetics under different inhibition conditions using Michaelis–Menten kinetics and Lineweaver–Burk analysis.
+
+The simulator allows users to:
+- simulate enzyme-substrate reactions by asking for requied inputs,
+- compare inhibition mechanisms,
+- generate CSV datasets,
+- and automatically visualize kinetic behavior using Python-generated plots.
+
+---
 
 ## Features
 
-- Object-Oriented Design
-- Numerical simulation of substrate depletion
-- Time-based enzyme reaction modeling
-- Competitive inhibition support
-- File input/output system
-- Dynamic velocity tracking
-- Conversion analysis
+- Interactive terminal-based simulation
+- Michaelis–Menten kinetics implementation
+- Competitive inhibition simulation
+- Noncompetitive inhibition simulation
+- Combined comparison of all models
+- Automatic CSV generation
+- Automatic graph generation using Python
+- Lineweaver–Burk plot generation
+- User-defined kinetic parameters
 
-## Scientific Model
-
-The simulator uses Michaelis-Menten enzyme kinetics:
-
-v = (Vmax * [S]) / (Km + [S])
-
-Where:
-- Vmax = maximum reaction velocity
-- Km = Michaelis constant
-- [S] = substrate concentration
+---
 
 ## Technologies Used
 
 - C++
-- OOP
-- File Handling
-- Numerical Simulation
-- Scientific Computing
+- Python
+- Matplotlib
+- Pandas
+- Git & GitHub
 
-## Run Instructions
+---
 
-Compile:
+## Project Structure
 
+enzyme-kinetics-simulator/
+
+├── include/                  
+├── src/                      
+
+├── results/                  
+├── plots/                    
+
+├── plot_normal.py
+├── plot_competitive.py
+├── plot_noncompetitive.py
+├── plot_combined.py
+
+├── plot_lineweaver_normal.py
+├── plot_lineweaver_competitive.py
+├── plot_lineweaver_noncompetitive.py
+├── plot_lineweaver_combined.py
+
+├── README.md
+├── .gitignore
+└── LICENSE
+
+---
+
+## Models Implemented
+
+### Michaelis–Menten Kinetics
+
+v = (Vmax × [S]) / (Km + [S])
+
+### Competitive Inhibition
+
+v = (Vmax × [S]) / (Km(1 + [I]/Ki) + [S])
+
+### Noncompetitive Inhibition
+
+v = ((Vmax / (1 + [I]/Ki)) × [S]) / (Km + [S])
+
+---
+
+## How to Run
+
+### Compile
+
+```bash
 g++ src/*.cpp -o simulator
-
-Run:
-
-./simulator
-
-## Output
-
-The program generates:
-- substrate concentration history
-- reaction velocity history
-- conversion percentages over time
-
-## Future Improvements
-
-- Non-competitive inhibition
-- Multi-enzyme pathways
-- Graph plotting
-- Parameter fitting
-- GUI support
