@@ -8,6 +8,42 @@
 #include "../include/file_handler.h"
 #include "../include/lineweaver_burk.h"
 
+void saveSimulationCSV(
+    KineticsModel& model,
+    double initialSubstrate,
+    double dt,
+    double totalTime,
+    const std::string& outputFile
+) {
+
+    std::vector<double> timeData;
+    std::vector<double> substrateData;
+
+    double S = initialSubstrate;
+
+    int steps = totalTime / dt;
+
+    for (int i = 0; i < steps; i++) {
+
+        double time = i * dt;
+
+        double velocity = model.calculateVelocity(S);
+
+        S = S - velocity * dt;
+
+        if (S < 0)
+            S = 0;
+
+        timeData.push_back(time);
+        substrateData.push_back(S);
+    }
+
+    FileHandler::writeCSV(
+        outputFile,
+        timeData,
+        substrateData
+    );
+}
 
 void singleSimulation(
     KineticsModel& model,
@@ -209,10 +245,12 @@ int main() {
                     initialSubstrate,
                     dt,
                     totalTime,
-                    "normal.csv",
+                    "results/normal.csv",
                     "Normal Michaelis-Menten"
                 );
 
+                system("py plot_normal.py");
+                system("py plot_lineweaver_normal.py");
                 break;
 
             case 2:
@@ -222,10 +260,12 @@ int main() {
                     initialSubstrate,
                     dt,
                     totalTime,
-                    "competitive.csv",
+                    "results/competitive.csv",
                     "Competitive Inhibition"
                 );
 
+                system("py plot_competitive.py");
+                system("py plot_lineweaver_competitive.py");
                 break;
 
             case 3:
@@ -235,13 +275,39 @@ int main() {
                     initialSubstrate,
                     dt,
                     totalTime,
-                    "noncompetitive.csv",
+                    "results/noncompetitive.csv",
                     "Noncompetitive Inhibition"
                 );
 
+                system("py plot_noncompetitive.py");
+                system("py plot_lineweaver_noncompetitive.py");
                 break;
 
             case 4:
+
+                saveSimulationCSV(
+                    normal,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "results/normal.csv"
+                );
+
+                saveSimulationCSV(
+                    competitive,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "results/competitive.csv"
+                );
+
+                saveSimulationCSV(
+                    noncompetitive,
+                    initialSubstrate,
+                    dt,
+                    totalTime,
+                    "results/noncompetitive.csv"
+                );
 
                 combinedSimulation(
                     normal,
@@ -252,7 +318,9 @@ int main() {
                     totalTime
                 );
 
-                break;
+                system("py plot_combined.py");
+                system("py plot_lineweaver_combined.py");
+            break;
 
             case 5:
 
