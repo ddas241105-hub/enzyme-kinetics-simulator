@@ -63,4 +63,4 @@ g++ src/*.cpp -o simulator
 
 Debopriya Das
 
-Developed as a computational bioengineering and simulation project integrating biochemical kinetics with software engineering principles.
+Developed a computational bioengineering and simulation project integrating biochemical kinetics with software engineering principles.
