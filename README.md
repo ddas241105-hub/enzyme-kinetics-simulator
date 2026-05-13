@@ -31,33 +31,7 @@ The simulator allows users to:
 - Python
 - Matplotlib
 - Pandas
-
----
-
-## Project Structure
-
-enzyme-kinetics-simulator/
-
-├── include/                  
-├── src/                      
-
-├── results/                  
-├── plots/                    
-
-├── plot_normal.py
-├── plot_competitive.py
-├── plot_noncompetitive.py
-├── plot_combined.py
-
-├── plot_lineweaver_normal.py
-├── plot_lineweaver_competitive.py
-├── plot_lineweaver_noncompetitive.py
-├── plot_lineweaver_combined.py
-
-├── README.md
-├── .gitignore
-└── LICENSE
-
+  
 ---
 
 ## Models Implemented
