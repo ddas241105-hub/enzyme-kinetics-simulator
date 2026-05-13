@@ -31,7 +31,6 @@ The simulator allows users to:
 - Python
 - Matplotlib
 - Pandas
-- Git & GitHub
 
 ---
 
