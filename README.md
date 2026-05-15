@@ -62,7 +62,7 @@ v = (Vmax × [S]) / (Km(1 + [I]/Ki) + [S])
 v = ((Vmax / (1 + [I]/Ki)) × [S]) / (Km + [S])
 
 ### Temperature-Dependent Denaturation Model
-	​
+​
 Vmax(T) = Vopt * exp(-((T - Topt)^2) / (2 * sigma^2))
 
 ---
@@ -87,7 +87,9 @@ g++ src/*.cpp -o simulator
 
 ### Run
 
+```bash
 ./simulator
+```
 
 ---
 
