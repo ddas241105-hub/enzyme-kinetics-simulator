@@ -1,6 +1,7 @@
 # Enzyme Kinetics Simulator
 
-A C++-based simulation tool for studying enzyme kinetics under different inhibition conditions using Michaelis–Menten kinetics and Lineweaver–Burk analysis.
+A C++-based scientific simulation project for modeling enzyme kinetics under different biochemical conditions.
+The simulator implements Michaelis–Menten kinetics and Lineweaver- Burk plot analysis, competitive inhibition, noncompetitive inhibition, temperature-dependent enzyme activity, enzyme denaturation effects, automated graph generation, and parameter fitting using Python visualization tools.
 
 The simulator allows users to:
 - simulate enzyme-substrate reactions by asking for requied inputs,
@@ -18,19 +19,31 @@ The simulator allows users to:
 - Noncompetitive inhibition simulation
 - Combined comparison of all models
 - Automatic CSV generation
-- Automatic graph generation using Python
 - Lineweaver–Burk plot generation
 - Velocity vs substrate concentration analysis
 - User-defined kinetic parameters
+- Temperature-dependent enzyme activity
+- Enzyme denaturation modeling
+- Experimental noise simulation
+- Sensitivity analysis
+- Parameter fitting for Km and Vmax
+- Python-based scientific visualization
 
 ---
 
 ## Technologies Used
 
-- C++
-- Python
-- Matplotlib
-- Pandas
+### C++
+- Object-Oriented Programming (OOP)
+- Numerical simulation
+- File handling
+- Scientific computation
+  
+### Python
+- pandas
+- matplotlib
+- scipy
+- numpys
   
 ---
 
@@ -48,6 +61,20 @@ v = (Vmax × [S]) / (Km(1 + [I]/Ki) + [S])
 
 v = ((Vmax / (1 + [I]/Ki)) × [S]) / (Km + [S])
 
+### Temperature-Dependent Denaturation Model
+	​
+Vmax(T) = Vopt * exp(-((T - Topt)^2) / (2 * sigma^2))
+
+---
+
+## Project Structure
+
+- `src/` → source files  
+- `include/` → header files  
+- `results/` → generated CSV datasets  
+- `plots/` → generated graphs and visualizations  
+- `experimental_data.csv` → sample experimental dataset
+
 ---
 
 ## How to Run
@@ -57,10 +84,21 @@ v = ((Vmax / (1 + [I]/Ki)) × [S]) / (Km + [S])
 ```bash
 g++ src/*.cpp -o simulator
 ```
+
+### Run
+
+./simulator
+
+---
+
+## Demo Video 
+
+A quick walkthrough of the banking system:
+
+https://drive.google.com/file/d/1ZgPSnRRaVodg9V0TSb0Ithe5Y8dfRnyV/view?usp=drive_link
+
 ---
 
 ## Author
 
 Debopriya Das
-
-Developed a computational bioengineering and simulation project integrating biochemical kinetics with software engineering principles.
