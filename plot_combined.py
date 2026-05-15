@@ -16,7 +16,8 @@ plt.ylabel("Substrate Concentration")
 plt.title("Enzyme Kinetics Simulation")
 
 plt.legend()
-
+plt.tight_layout()
 plt.savefig("plots/combined_kinetics.png")
+plt.show()
 
 print("Graph generated successfully.")

@@ -30,7 +30,8 @@ plt.ylabel("1 / V")
 plt.title("Combined Lineweaver-Burk Plot")
 
 plt.legend()
-
+plt.tight_layout()
 plt.savefig("plots/lineweaver_combined.png")
+plt.show()
 
 print("Combined Lineweaver-Burk graph generated.")

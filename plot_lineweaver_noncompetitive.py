@@ -15,7 +15,7 @@ plt.plot(inverse_s[1:], inverse_v[1:])
 plt.xlabel("1 / [S]")
 plt.ylabel("1 / V")
 plt.title("Lineweaver-Burk Plot (NonCompetitive)")
-
+plt.tight_layout()
 plt.savefig("plots/lineweaver_noncompetitive.png")
 
 lineweaver = pd.DataFrame({
@@ -24,5 +24,5 @@ lineweaver = pd.DataFrame({
 })
 
 lineweaver.to_csv("results/lineweaver_noncompetitive.csv", index=False)
-
+plt.show()
 print("Lineweaver noncompetitive graph generated.")

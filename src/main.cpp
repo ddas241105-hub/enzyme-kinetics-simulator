@@ -321,6 +321,7 @@ int main() {
                 system("py plot_combined.py");
                 system("py plot_lineweaver_combined.py");
                 system("py plot_velocity.py");
+                system("py plot_sensitivity.py");
             break;
 
             case 5:

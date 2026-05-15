@@ -10,7 +10,8 @@ plt.plot(data["Time"], data["Substrate"])
 plt.xlabel("Time")
 plt.ylabel("Substrate Concentration")
 plt.title("Competitive Inhibition Kinetics")
-
+plt.tight_layout()
 plt.savefig("plots/competitive_plot.png")
+plt.show()
 
 print("Competitive graph generated.")
