@@ -170,7 +170,7 @@ void combinedSimulation(
 
 int main() {
 
-    double Vmax, Km, initialSubstrate, dt;
+    double Vmax, Km, temperature, initialSubstrate, dt;
     double competitiveInhibitor, nonCompetitiveInhibitor, totalTime;
 
     std::cout << "\n=== Enter Simulation Parameters ===\n";
@@ -180,6 +180,9 @@ int main() {
 
     std::cout << "Enter Km: ";
     std::cin >> Km;
+
+    std::cout << "Enter temperature (Kelvin): ";
+    std::cin >> temperature;
 
     std::cout << "Enter competitive inhibitor concentration: ";
     std::cin >> competitiveInhibitor;
@@ -196,7 +199,7 @@ int main() {
     std::cout << "Enter total simulation time: ";
     std::cin >> totalTime;
 
-    Enzyme enzyme(Km, Vmax, 37.0);
+    Enzyme enzyme(Km, Vmax, temperature);
 
     MichaelisMenten normal(enzyme);
 

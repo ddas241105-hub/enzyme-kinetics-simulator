@@ -22,9 +22,15 @@ double Enzyme::getTemperature() const {
 
 double Enzyme::adjustedVmax() const {
 
-    double optimum = 37.0;
+    double optimalTemp = 310.15;
 
-    double factor = exp(-0.01 * pow(temperature - optimum, 2));
+    double sigma = 15.0;
 
-    return Vmax * factor;
-}    
+    double exponent =
+        -pow(temperature - optimalTemp, 2)
+        / (2 * sigma * sigma);
+
+    double activityFactor = exp(exponent);
+
+    return Vmax * activityFactor;
+}   

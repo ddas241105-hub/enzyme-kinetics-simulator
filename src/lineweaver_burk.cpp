@@ -1,4 +1,5 @@
 #include "../include/lineweaver_burk.h"
+#include <cmath>
 
 std::vector<double> LineweaverBurk::inverseSubstrate(
     const std::vector<double>& substrate) {

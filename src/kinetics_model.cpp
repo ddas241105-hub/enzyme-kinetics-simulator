@@ -1,4 +1,5 @@
 #include "../include/kinetics_model.h"
+#include <cmath>
 
 KineticsModel::KineticsModel(const Enzyme& e)
     : enzyme(e) {}
@@ -10,10 +11,10 @@ MichaelisMenten::MichaelisMenten(const Enzyme& e)
 
 double MichaelisMenten::calculateVelocity(double substrate) {
 
-    double vmax = enzyme.adjustedVmax();
+    double adjustedVmax = enzyme.adjustedVmax();
 
-    return (vmax * substrate)
-           / (enzyme.getKm() + substrate);
+    return (adjustedVmax * substrate) /
+           (enzyme.getKm() + substrate);
 }
 
 
