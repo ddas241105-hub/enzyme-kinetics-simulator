@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("results/noncompetitive.csv")
+data = pd.read_csv("../results/noncompetitive.csv")
 
 plt.figure(figsize=(8,5))
 

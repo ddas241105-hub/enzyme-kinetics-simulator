@@ -1,9 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-normal = pd.read_csv("results/normal.csv")
-competitive = pd.read_csv("results/competitive.csv")
-noncompetitive = pd.read_csv("results/noncompetitive.csv")
+normal = pd.read_csv("../results/normal.csv")
+competitive = pd.read_csv("../results/competitive.csv")
+noncompetitive = pd.read_csv("../results/noncompetitive.csv")
 
 normal = normal[normal["Substrate"] > 0]
 competitive = competitive[competitive["Substrate"] > 0]

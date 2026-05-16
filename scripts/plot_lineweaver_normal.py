@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("results/normal.csv")
+data = pd.read_csv("../results/normal.csv")
 
 data = data[data["Substrate"] > 0]
 
@@ -23,6 +23,6 @@ lineweaver = pd.DataFrame({
     "1/V": inverse_v[1:]
 })
 
-lineweaver.to_csv("results/lineweaver_normal.csv", index=False)
+lineweaver.to_csv("../results/lineweaver_normal.csv", index=False)
 plt.show()
 print("Lineweaver normal graph generated.")

@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("results/noncompetitive.csv")
+data = pd.read_csv("../results/competitive.csv")
 
 data = data[data["Substrate"] > 0]
 
@@ -14,15 +14,15 @@ plt.plot(inverse_s[1:], inverse_v[1:])
 
 plt.xlabel("1 / [S]")
 plt.ylabel("1 / V")
-plt.title("Lineweaver-Burk Plot (NonCompetitive)")
+plt.title("Lineweaver-Burk Plot (Competitive)")
 plt.tight_layout()
-plt.savefig("plots/lineweaver_noncompetitive.png")
+plt.savefig("plots/lineweaver_competitive.png")
 
 lineweaver = pd.DataFrame({
     "1/S": inverse_s[1:],
     "1/V": inverse_v[1:]
 })
 
-lineweaver.to_csv("results/lineweaver_noncompetitive.csv", index=False)
+lineweaver.to_csv("../results/lineweaver_competitive.csv", index=False)
 plt.show()
-print("Lineweaver noncompetitive graph generated.")
+print("Lineweaver competitive graph generated.")
